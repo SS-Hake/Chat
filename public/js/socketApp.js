@@ -9,6 +9,7 @@ $(document).ready(function() {
 	$('#messages').append($('<li>')
 		.text("------ Hello and welcome to my chat app! ------"));
 
+	
 	/*$('#m').is(':focus')*/
 	//Prototype typing code. - broken
 	/*if ($('#m').is(':focus')) {
