@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Real Time Chat App</title>
+	<link rel="stylesheet" type="text/css" href="css/main.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+	<script src="http://127.0.0.1:8080/socket.io/socket.io.js"></script>
+
+	<script src="app.js"></script>
+</head>
+<body>
+	<div class="chat">
+		<input type="text" class="chat-name" placeholder="Enter your name">
+		<div class="chat-messages"></div>
+		<textarea class="chat-textarea" placeholder="Type a message..."></textarea>
+		<div class="chat-status">Status: <span>Idle</span></div>
+	</div>
+</body>
+</html>
