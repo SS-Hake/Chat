@@ -14,7 +14,10 @@ mongo.connect('mongodb://127.0.0.1/chat', function(err, db) {
 		//Log to show someone connecting.
 		console.log("[+] Someone has connected...")
 		//Grab the collection within the db to store the messages.
-		var col = db.collection('messages')
+		var col = db.collection('messages'),
+			sendStatus = function(s) {
+				socket.emit('status', s)
+			}
 
 		socket.on('input', function(data) {
 			//Log the data to the console.
@@ -27,9 +30,13 @@ mongo.connect('mongodb://127.0.0.1/chat', function(err, db) {
 
 			if (whitespacePattern.test(name)|| whitespacePattern.test(message)) {
 				console.log('[-] Invalid...')
+				sendStatus('[-] Name and message required...')
 			} else {
 				col.insert({name: name, message: message}, function(){
 					console.log("[+] Inserted...")
+					sendStatus({message: "Message sent",
+						clear: true
+					})
 				})
 			}
 

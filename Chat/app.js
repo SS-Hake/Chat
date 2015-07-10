@@ -10,9 +10,18 @@ $(document).ready(function() {
 
 	statusDefault = status.textContent,
 	
-	setStatus = function() {
-		
+	setStatus = function(s) {
+		status.textContent = s
+
+		if(s !== statusDefault) {
+			var delay = setTimeout(function() {
+				setStatus(statusDefault)
+				clearInterval(delay)
+			}, 3000)
+		}	
 	};
+
+	setStatus("Testing...")
 
 	try {
 		var socket = io.connect('http://127.0.0.1:8080');
@@ -23,8 +32,12 @@ $(document).ready(function() {
 	console.log(socket)
 	if(socket !== undefined) {
 
-		socket.on('status', function() {
+		socket.on('status', function(data) {
+			setStatus((typeof data === 'object') ? data.message : data)
 
+			if(data.clear === true) {
+				textarea.value = ''
+			}
 		})
 
 		textarea.addEventListener('keydown', function(evt) {
