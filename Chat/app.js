@@ -4,6 +4,7 @@ $(document).ready(function() {
 		return document.querySelector(s);
 	},
 
+	messages = getElement('.chat-messages'),
 	status = getElement('.chat-status span'),
 	textarea = getElement('.chat-textarea'),
 	chatName = getElement('.chat-name'),
@@ -29,8 +30,21 @@ $(document).ready(function() {
 		//Set warning
 		console.log(e)
 	}
-	console.log(socket)
+	
 	if(socket !== undefined) {
+
+		socket.on('output', function(data) {
+			if(data.length) {
+				for(var x = 0; x < data.length; x++) {
+					var message = document.createElement('div')
+					message.setAttribute('class', 'chat-message')
+					message.textContent = data[x].name + ': ' + data[x].message
+
+					messages.appendChild(message)
+					messages.insertBefore(message, messages.lastChild)
+				}
+			}
+		})
 
 		socket.on('status', function(data) {
 			setStatus((typeof data === 'object') ? data.message : data)

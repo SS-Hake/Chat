@@ -17,11 +17,14 @@ mongo.connect('mongodb://127.0.0.1/chat', function(err, db) {
 		var col = db.collection('messages'),
 			sendStatus = function(s) {
 				socket.emit('status', s)
-			}
+			};
+
+		col.find().limit(100).sort({_id: 1}).toArray(function(err, res) {
+			if(err) throw err
+			socket.emit('output', res)
+		})
 
 		socket.on('input', function(data) {
-			//Log the data to the console.
-			console.log(data)
 
 			//Grab data from the passed object.
 			var name = data.name,
@@ -33,6 +36,9 @@ mongo.connect('mongodb://127.0.0.1/chat', function(err, db) {
 				sendStatus('[-] Name and message required...')
 			} else {
 				col.insert({name: name, message: message}, function(){
+
+					client.emit('output', [data])
+
 					console.log("[+] Inserted...")
 					sendStatus({message: "Message sent",
 						clear: true
